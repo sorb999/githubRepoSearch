@@ -1,0 +1,43 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div *ngIf="!showTopPackages">
+  <div style="text-align:center">
+    <h1>
+      Welcome to Search Repositories 
+    </h1>
+  </div>
+
+    <form class="example-form" [formGroup]='repoForm'>
+      <mat-form-field class="example-full-width" style="width: 425px;">
+        <input matInput placeholder="Choose a user" [matAutocomplete]="auto" formControlName='userInput'>
+      </mat-form-field>
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let repo of (filteredUsers | async)?.results" [ngStyle]="repo.selected?{'background-color':'#c4cbd1'} : {'background-color': ''}" [value]="repo">
+            <span>{{ repo.name }}</span>
+            <small> | {{repo.stargazers_count}}
+              <img src="./../assets/fork_icon.png" class="imgSize" alt="">
+            </small>
+            <small> | {{repo.forks_count}}
+              <img src="./../assets/star_icon.png" class="imgSize" alt="">
+            </small>
+            <small> |
+              <img (click)="onImportClick(repo)" src="./../assets/import_icon.png" class="imgSize" alt="">
+            </small>
+          </mat-option>
+      </mat-autocomplete>
+    </form>
+      
+    
+  <button mat-button color="primary" (click)="getTopPackagesList()">Show Top Packages</button>
+     
+  </div>
+
+  <div *ngIf="showTopPackages" style="text-align:center">
+    <h1>      
+      Top Repositories 
+    </h1>
+    <ul>
+        <li *ngFor="let pkg of topPackagesList | slice:0:10;">{{pkg._id}} | {{pkg.count}}</li>
+      </ul>  
+    <button mat-button color="primary" (click)="showTopPackages = !showTopPackages">Show Search</button>
+
+  </div>
